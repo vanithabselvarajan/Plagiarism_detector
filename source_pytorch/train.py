@@ -116,7 +116,16 @@ if __name__ == '__main__':
     
     ## TODO: Add args for the three model parameters: input_features, hidden_dim, output_dim
     # Model Parameters
-    
+    parser.add_argument('--input-features', type=int, default=2, metavar='IN',
+                        help='number of input features')
+    parser.add_argument('--hidden-dim', metavar='H', nargs='*', default=[64,64],
+                        help='size of hidden layers')
+    parser.add_argument('--output-dim', type=int, default=1, metavar='OUT',
+                        help='number of outputs')
+    parser.add_argument('--dropout', type=float, default=0.2, metavar='D',
+                        help='probability of an element to be zeroed')
+    parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
+                        help='learning rate (default: 0.001)')
     
     # args holds all passed-in arguments
     args = parser.parse_args()
@@ -135,11 +144,13 @@ if __name__ == '__main__':
     ## TODO:  Build the model by passing in the input params
     # To get params from the parser, call args.argument_name, ex. args.epochs or ards.hidden_dim
     # Don't forget to move your model .to(device) to move to GPU , if appropriate
-    model = None
+    model = BinaryClassifier(args.input_features, args.hidden_dim,
+                             args.output_dim, args.dropout)
+    model.to(device)
 
     ## TODO: Define an optimizer and loss function for training
-    optimizer = None
-    criterion = None
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    criterion = nn.BCELoss()
 
     # Trains the model (given line of code, which calls the above training function)
     train(model, train_loader, args.epochs, criterion, optimizer, device)
@@ -150,8 +161,8 @@ if __name__ == '__main__':
     with open(model_info_path, 'wb') as f:
         model_info = {
             'input_features': args.input_features,
-            'hidden_dim': <add_arg>,
-            'output_dim': <add_arg>,
+            'hidden_dim': args.hidden_dim,
+            'output_dim': args.hidden_dim,
         }
         torch.save(model_info, f)
         
