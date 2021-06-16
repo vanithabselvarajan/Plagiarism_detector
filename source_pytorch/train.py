@@ -104,7 +104,7 @@ if __name__ == '__main__':
     # Do not need to change
     parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
+    parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAINING'])
     
     # Training Parameters, given
     parser.add_argument('--batch-size', type=int, default=10, metavar='N',
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('--dropout', type=float, default=0.2, metavar='D',
                         help='probability of an element to be zeroed')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
-                        help='learning rate (default: 0.001)')
+                        #help='learning rate (default: 0.001)')
     
     # args holds all passed-in arguments
     args = parser.parse_args()
@@ -144,8 +144,8 @@ if __name__ == '__main__':
     ## TODO:  Build the model by passing in the input params
     # To get params from the parser, call args.argument_name, ex. args.epochs or ards.hidden_dim
     # Don't forget to move your model .to(device) to move to GPU , if appropriate
-    model = BinaryClassifier(args.input_features, args.hidden_dim,
-                             args.output_dim, args.dropout)
+    model = BinaryClassifier(args.input_features, args.hidden_dim, 
+                             args.output_dim, args.dropout, args.lr)
     model.to(device)
 
     ## TODO: Define an optimizer and loss function for training
@@ -162,7 +162,7 @@ if __name__ == '__main__':
         model_info = {
             'input_features': args.input_features,
             'hidden_dim': args.hidden_dim,
-            'output_dim': args.hidden_dim,
+            'output_dim': args.output_dim,
         }
         torch.save(model_info, f)
         
