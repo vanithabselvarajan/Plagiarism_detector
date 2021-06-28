@@ -26,7 +26,19 @@ class BinaryClassifier(nn.Module):
         """
         super(BinaryClassifier, self).__init__()
 
-        # define any initial layers, here
+        nodes = []
+        nodes.append(input_features)
+        if type(hidden_dim) == int:
+            nodes.append(hidden_dim)
+        elif type(hidden_dim) == list:
+            nodes.extend(hidden_dim)
+        nodes.append(output_dim)
+
+        self.module_list = nn.ModuleList()
+        for n_in, n_out in zip(nodes[:-1], nodes[1:]):
+            self.module_list.append(nn.Linear(n_in, n_out))
+
+        self.dropout = nn.Dropout(dropout)
         
 
     
@@ -40,5 +52,10 @@ class BinaryClassifier(nn.Module):
         
         # define the feedforward behavior
         
-        return x
+        for layer in self.module_list[:-1]:
+            x = F.relu(layer(x))
+            x = self.dropout(x)
+        x = self.module_list[-1](x)
+
+        return torch.sigmoid(x)
     
