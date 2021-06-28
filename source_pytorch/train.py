@@ -125,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('--dropout', type=float, default=0.2, metavar='D',
                         help='probability of an element to be zeroed')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
-                        #help='learning rate (default: 0.001)')
+                        help='learning rate (default: 0.001)')
     
     # args holds all passed-in arguments
     args = parser.parse_args()
