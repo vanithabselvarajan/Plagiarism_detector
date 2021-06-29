@@ -146,7 +146,7 @@ if __name__ == '__main__':
     # Don't forget to move your model .to(device) to move to GPU , if appropriate
     model = BinaryClassifier(args.input_features, args.hidden_dim, 
                              args.output_dim, args.dropout, args.lr)
-    model.to(device)
+    #model.to(device)
 
     ## TODO: Define an optimizer and loss function for training
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
