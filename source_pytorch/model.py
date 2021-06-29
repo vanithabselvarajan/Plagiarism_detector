@@ -53,9 +53,10 @@ class BinaryClassifier(nn.Module):
         # define the feedforward behavior
         
         for layer in self.module_list[:-1]:
+            
             x = F.relu(layer(x))
             x = self.dropout(x)
-        x = self.module_list[-1](x)
+            x = self.module_list[-1](x)
 
         return torch.sigmoid(x)
     
