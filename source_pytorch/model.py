@@ -1,4 +1,5 @@
 # torch imports
+import torch
 import torch.nn.functional as F
 import torch.nn as nn
 
@@ -38,7 +39,7 @@ class BinaryClassifier(nn.Module):
         for n_in, n_out in zip(nodes[:-1], nodes[1:]):
             self.module_list.append(nn.Linear(n_in, n_out))
 
-        self.dropout = nn.Dropout(dropout)
+        #self.dropout = nn.Dropout(dropout)
         
 
     
@@ -53,10 +54,9 @@ class BinaryClassifier(nn.Module):
         # define the feedforward behavior
         
         for layer in self.module_list[:-1]:
-            
             x = F.relu(layer(x))
-            x = self.dropout(x)
-            x = self.module_list[-1](x)
+            #x = self.dropout(x)
+        x = self.module_list[-1](x)
 
         return torch.sigmoid(x)
     
