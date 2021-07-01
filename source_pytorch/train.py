@@ -3,6 +3,7 @@ import json
 import os
 import pandas as pd
 import torch
+import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
 
@@ -129,8 +130,13 @@ if __name__ == '__main__':
     
     # args holds all passed-in arguments
     args = parser.parse_args()
+                     
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+                        device = torch.device("cuda")
+    else:
+                        device = torch.device("cpu")                
     print("Using device {}.".format(device))
 
     torch.manual_seed(args.seed)
@@ -145,7 +151,7 @@ if __name__ == '__main__':
     # To get params from the parser, call args.argument_name, ex. args.epochs or ards.hidden_dim
     # Don't forget to move your model .to(device) to move to GPU , if appropriate
     model = BinaryClassifier(args.input_features, args.hidden_dim, 
-                             args.output_dim, args.dropout, args.lr)
+                             args.output_dim)
     #model.to(device)
 
     ## TODO: Define an optimizer and loss function for training
